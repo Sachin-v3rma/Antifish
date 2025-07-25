@@ -1,90 +1,97 @@
-# Antifish
+# 🛡️ Multi-Engine Phishing Detector
 
-This project provides a comprehensive solution for detecting phishing emails using Natural Language Processing (NLP) and a variety of Machine Learning models. It includes a Python script to train and evaluate multiple classifiers and a graphical user interface (GUI) built with Tkinter to analyze emails in real-time.
+An advanced, web-based phishing detection tool that uses multiple machine learning models to analyze emails. Inspired by VirusTotal, this application provides a more robust and reliable verdict by leveraging the consensus of several detection "engines."
 
-## Features
+## Key Features
 
-*   **Advanced Text Preprocessing:** Implements a full NLP pipeline including lowercasing, removal of URLs, HTML tags, email addresses, and special characters. It also includes tokenization, stop-word removal, and stemming.
-*   **Multiple Machine Learning Models:** Trains and evaluates the following popular classification algorithms:
-    *   Naive Bayes
-    *   Logistic Regression
-    *   Random Forest
-    *   Support Vector Machine (SVM)
-*   **Best Model Selection:** Automatically selects the best-performing model based on cross-validation accuracy.
-*   **Model Persistence:** Saves the trained vectorizer and model to a file, avoiding the need for retraining on subsequent runs.
-*   **Interactive GUI:** A user-friendly graphical interface to:
-    *   Input and analyze email text.
-    *   Display the prediction (phishing or legitimate) with a confidence score.
-    *   **Load various email examples** from a dropdown menu to test the model's performance.
+-   **Multi-Engine Analysis:** Uses Logistic Regression, SVM, and Random Forest simultaneously to evaluate emails, reducing the risk of a single model's blind spot.
+-   **VirusTotal-Style Verdict:** Presents a final verdict based on a majority vote from the trained models.
+-   **Interactive Web UI:** A clean and modern user interface built with Streamlit for easy use.
+-   **Detailed Reporting:** Includes an "Engine Breakdown" table and a confidence level bar chart for a transparent analysis.
+-   **Intelligent Feature Engineering:** Goes beyond simple word matching by creating special feature tokens for URLs (`urlexist`), suspicious links (`suspiciouslink`), and urgent language (`urgencyword`).
+-   **Sample Emails:** Comes with a dropdown of pre-loaded sample emails for quick and easy testing.
 
 ## Project Structure
 
-For the script to work correctly, your project must follow this directory structure:
+A well-organized project structure is key. Ensure your directory looks like this:
 
 ```
-your-project-folder/
+phishing-detector/
 │
 ├── assets/
-│   └── CEAS_08.csv              # Place your dataset here
+│   └── phishing_detector_model_v3.pkl  # The multi-engine model created by the training script
 │
 ├── sample_emails/
-│   ├── 01_phishing_urgent_account.txt
-│   ├── 02_phishing_invoice_scam.txt
-│   └── ... (other .txt sample files)
+│   ├── 01_Sample_Phishing.txt
+│   └── 02_Sample_Legitimate.txt
 │
-├── antifish_v0.1.py             # The main script
-└── requirements.txt             # The dependency file
+├── app.py                         # The main Streamlit web application file
+├── train_model.py                 # The script to train the model from a dataset
+└── requirements.txt               # List of project dependencies
 ```
 
-## Dependencies
+## How to Set Up and Run
 
-To run this project, you will need Python 3 and the libraries listed in `requirements.txt`.
+Follow these steps to get the phishing detector running on your local machine.
 
-1.  Create a file named `requirements.txt` in your project directory with the following content:
-    ```
-    pandas
-    scikit-learn
-    nltk
-    ```2.  Install the dependencies using pip:
-    ```bash
-    pip install -r requirements.txt
-    ```
-The script will handle the download of necessary NLTK packages (`punkt`, `stopwords`) on its first run.
+### Prerequisites
 
-## How to Use
+-   Python 3.8+
+-   `pip` for installing packages
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone <repository_url>
-    cd <repository_directory>
-    ```
-2.  **Set Up Directories:**
-    *   Create a folder named `assets`.
-    *   Create a folder named `sample_emails`.
-    *   Place your email dataset (e.g., `CEAS_08.csv`) inside the `assets` folder.
-    *   Place any `.txt` sample emails you want to test in the `sample_emails` folder.
+### Step 1: Clone and Install Dependencies
 
-3.  **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+First, clone this repository to your local machine and navigate into the project directory. Then, install all the required libraries using the `requirements.txt` file.
 
-4.  **Run the Script:**
-    ```bash
-    python antifish_v0.1.py
-    ```
+```bash
+git clone <your-repository-url>
+cd phishing-detector
+pip install -r requirements.txt
+```
 
-5.  **Training (First Run):**
-    *   The script will first check for a pre-trained model at `assets/phishing_detector_model.pkl`.
-    *   If not found, it will automatically look for `assets/CEAS_08.csv` to begin the training process.
-    *   If that dataset is also not found, it will fall back to asking you for the file path in the console.
-    *   The script will preprocess the data, train the models, and save the best one to the `assets` folder.
+### Step 2: Train the Model (One-Time Setup)
 
-6.  **Using the GUI:**
-    *   Once a model is loaded or trained, the GUI will launch.
-    *   Paste email content into the text box and click **Analyze Email**.
-    *   To test with pre-saved examples, select one from the **dropdown menu** and click **Load Sample**.
+Before you can run the web app, you must train the machine learning models using your dataset. This process creates the `phishing_detector_model_v3.pkl` file that the app relies on.
 
-## A Note on Training Time
+Run the training script from your terminal:
 
-The training process involves multiple algorithms. The **Support Vector Machine (SVM)** can be computationally intensive and may take a significant amount of time to train, especially on datasets with tens of thousands of emails. If the script seems "stuck" on `Training SVM...`, please be patient as this is normal behavior. For a much faster (though slightly different) implementation, you could modify the script to use `sklearn.svm.LinearSVC` instead of `SVC(kernel='linear')`.
+```bash
+python train_model.py
+```
+
+The script will prompt you to enter the path to your dataset. A CSV file with 'Subject', 'Body', and 'Label' columns is expected. For example:
+
+```
+Enter the path to your dataset CSV file (e.g., assets/CEAS_08.csv): assets/CEAS_08.csv```
+
+Let the script run to completion. It will preprocess the data, train the models, and save the final `.pkl` file in the `assets/` directory.
+
+### Step 3: Run the Streamlit Web App
+
+Once the model file has been created, you can launch the web application.
+
+```bash
+streamlit run app.py
+```
+
+Your default web browser will automatically open a new tab with the Multi-Engine Phishing Detector running. You can now paste emails, use the samples, and see the analysis dashboard in action!
+
+## How It Works: The Detection Logic
+
+This detector's accuracy is enhanced by **feature engineering**. Instead of just looking at words, the preprocessing pipeline identifies key phishing indicators and converts them into special tokens that the models can learn from:
+
+-   `urlexist`: Added if any URL is found.
+-   `suspiciouslink`: Added if a URL contains common phishing keywords (e.g., "login", "verify") or suspicious top-level domains (e.g., ".xyz", ".club").
+-   `urgencyword`: Added if the email contains high-pressure words like "urgent", "expired", or "action required".
+-   `genericgreet`: Added for impersonal greetings like "Dear user" or "Valued customer".
+
+By training on these tokens in addition to the regular email text, the models become much better at identifying the *tactics* of phishing, not just the vocabulary.
+
+## Dependencies (`requirements.txt`)
+
+```
+pandas
+scikit-learn
+nltk
+streamlit
+```
