@@ -1,0 +1,18 @@
+Subject: URGENT: Your Account Will Be Suspended
+
+Dear Valued Customer,
+
+We have detected suspicious activity on your account. Your account will be suspended within 24 hours unless you verify your information immediately.
+
+Click here to verify your account: http://fake-bank-security.com/verify
+
+Please provide the following information:
+- Full Name
+- Social Security Number
+- Account Number
+- PIN
+
+Failure to respond will result in permanent account closure.
+
+Best regards,
+Security Team
