@@ -26,7 +26,7 @@ phishing-detector/
 │   └── 02_Sample_Legitimate.txt
 │
 ├── app.py                         # The main Streamlit web application file
-├── train_model.py                 # The script to train the model from a dataset
+├── antifish.py                 # The script to train the model from a dataset
 └── requirements.txt               # List of project dependencies
 ```
 
@@ -44,8 +44,8 @@ Follow these steps to get the phishing detector running on your local machine.
 First, clone this repository to your local machine and navigate into the project directory. Then, install all the required libraries using the `requirements.txt` file.
 
 ```bash
-git clone <your-repository-url>
-cd phishing-detector
+git clone https://github.com/Sachin-v3rma/Antifish
+cd Antifish
 pip install -r requirements.txt
 ```
 
@@ -56,7 +56,7 @@ Before you can run the web app, you must train the machine learning models using
 Run the training script from your terminal:
 
 ```bash
-python train_model.py
+python antifish_v0.3.py
 ```
 
 The script will prompt you to enter the path to your dataset. A CSV file with 'Subject', 'Body', and 'Label' columns is expected. For example:
