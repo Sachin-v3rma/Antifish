@@ -16,10 +16,11 @@ An advanced, web-based phishing detection tool that uses multiple machine learni
 A well-organized project structure is key. Ensure your directory looks like this:
 
 ```
-phishing-detector/
+Antifish/
 │
 ├── assets/
-│   └── phishing_detector_model_v3.pkl  # The multi-engine model created by the training script
+│   ├── dataset.csv
+|   └── phishing_detector_model_v3.pkl  # The multi-engine model created by the training script
 │
 ├── sample_emails/
 │   ├── 01_Sample_Phishing.txt
@@ -56,7 +57,7 @@ Before you can run the web app, you must train the machine learning models using
 Run the training script from your terminal:
 
 ```bash
-python antifish_v0.3.py
+python antifish.py
 ```
 
 The script will prompt you to enter the path to your dataset. A CSV file with 'Subject', 'Body', and 'Label' columns is expected. For example:
@@ -91,6 +92,7 @@ By training on these tokens in addition to the regular email text, the models be
 
 ```
 pandas
+numpy
 scikit-learn
 nltk
 streamlit
