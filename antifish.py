@@ -133,7 +133,11 @@ def main():
     detector = PhishingDetector()
     model_path = "assets/phishing_detector_model.pkl"
     print("--- Phishing Detector Model Training Script ---")
-    dataset_path = input("Enter the path to your dataset CSV file (e.g., assets/CEAS_08.csv): ")
+    try:
+        dataset_path = "assets/CEAS_08.csv"
+    except FileNotFoundError:
+        print("Dataset not found in assets folder.")
+        dataset_path = input("Enter the path to your dataset CSV file: ")
     if not os.path.exists(dataset_path):
         print(f"\n[ERROR] Dataset file not found: '{dataset_path}'")
         return
